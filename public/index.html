@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ffffff"
+    >
+
+    <meta
+        name="description"
+        content="NOVA AI — Your intelligent AI assistant for conversations, coding and online research."
+    >
+
+    <title>NOVA AI</title>
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- Code syntax highlighting -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css"
+    >
+
+    <!-- Markdown renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- HTML sanitization -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
+    <!-- Code highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Application -->
+    <div class="app" id="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <!-- Sidebar header -->
+            <div class="sidebar-header">
+
+                <a
+                    href="/"
+                    class="brand"
+                    aria-label="NOVA AI home"
+                >
+                    <span class="brand-symbol" aria-hidden="true">✳</span>
+                    <span class="brand-name">NOVA AI</span>
+                </a>
+
+                <button
+                    type="button"
+                    class="icon-button sidebar-close"
+                    id="sidebar-close"
+                    aria-label="Close sidebar"
+                    title="Close sidebar"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6"/>
+                        <path d="M9 12h11"/>
+                        <path d="M4 5v14"/>
+                    </svg>
+                </button>
+
+            </div>
+
+
+            <!-- New chat -->
+            <button
+                type="button"
+                class="new-chat-button"
+                id="new-chat"
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 5v14"/>
+                    <path d="M5 12h14"/>
+                </svg>
+
+                <span>New chat</span>
+
+                <span class="shortcut">+</span>
+            </button>
+
+
+            <!-- Sidebar navigation -->
+            <nav class="sidebar-navigation" aria-label="Main navigation">
+
+                <button
+                    type="button"
+                    class="navigation-item"
+                    id="search-chats-button"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="m16 16 5 5"/>
+                    </svg>
+
+                    <span>Search chats</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="navigation-item"
+                    id="research-shortcut"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M3 12h18"/>
+                        <path d="M12 3a15 15 0 0 1 0 18"/>
+                        <path d="M12 3a15 15 0 0 0 0 18"/>
+                    </svg>
+
+                    <span>Online research</span>
+                </button>
+
+            </nav>
+
+
+            <!-- Chat history heading -->
+            <div class="history-heading">
+
+                <span>YOUR CHATS</span>
+
+                <button
+                    type="button"
+                    class="icon-button small-icon-button"
+                    id="refresh-history"
+                    aria-label="Refresh chat list"
+                    title="Refresh chat list"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7v5h-5"/>
+                        <path d="M4 17v-5h5"/>
+                        <path d="M5.5 9a7 7 0 0 1 12-2L20 12"/>
+                        <path d="M18.5 15a7 7 0 0 1-12 2L4 12"/>
+                    </svg>
+                </button>
+
+            </div>
+
+
+            <!-- Search chats panel -->
+            <div
+                class="chat-search-panel"
+                id="chat-search-panel"
+                hidden
+            >
+                <label for="chat-search-input" class="visually-hidden">
+                    Search conversations
+                </label>
+
+                <input
+                    type="search"
+                    id="chat-search-input"
+                    placeholder="Search conversations..."
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="close-chat-search"
+                    class="icon-button"
+                    aria-label="Close chat search"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m18 6-12 12"/>
+                        <path d="m6 6 12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+
+            <!-- Saved conversations -->
+            <div
+                class="chat-list"
+                id="chat-list"
+                role="list"
+                aria-label="Saved conversations"
+            >
+                <!-- Populated by script.js -->
+            </div>
+
+
+            <!-- Sidebar bottom -->
+            <div class="sidebar-footer">
+
+                <button
+                    type="button"
+                    class="profile-button"
+                    id="profile-button"
+                >
+                    <span class="profile-avatar">N</span>
+
+                    <span class="profile-details">
+                        <span class="profile-name">NOVA AI</span>
+                        <span class="profile-description">
+                            Personal assistant
+                        </span>
+                    </span>
+
+                    <svg
+                        class="profile-menu-icon"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <circle cx="5" cy="12" r="1"/>
+                        <circle cx="12" cy="12" r="1"/>
+                        <circle cx="19" cy="12" r="1"/>
+                    </svg>
+                </button>
+
+                <!-- Profile/settings menu -->
+                <div
+                    class="profile-menu"
+                    id="profile-menu"
+                    hidden
+                >
+                    <button
+                        type="button"
+                        id="theme-menu-button"
+                    >
+                        Toggle appearance
+                    </button>
+
+                    <button
+                        type="button"
+                        id="clear-all-chats"
+                    >
+                        Clear all chats
+                    </button>
+
+                    <button
+                        type="button"
+                        id="about-nova"
+                    >
+                        About NOVA AI
+                    </button>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN APPLICATION -->
+        <main class="main-panel">
+
+            <!-- TOP BAR -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        type="button"
+                        class="icon-button sidebar-open"
+                        id="sidebar-open"
+                        aria-label="Open sidebar"
+                        title="Open sidebar"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 6h16"/>
+                            <path d="M4 12h16"/>
+                            <path d="M4 18h16"/>
+                        </svg>
+                    </button>
+
+                    <div class="mobile-brand">
+                        <span class="brand-symbol" aria-hidden="true">✳</span>
+                        <span>NOVA AI</span>
+                    </div>
+
+                    <div class="conversation-heading">
+                        <h1 id="conversation-title">New conversation</h1>
+
+                        <span
+                            class="connection-status"
+                            id="connection-status"
+                            role="status"
+                        >
+                            <span
+                                class="status-dot"
+                                id="status-dot"
+                            ></span>
+
+                            <span id="status-text">Connecting...</span>
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <!-- Research toggle -->
+                    <button
+                        type="button"
+                        class="topbar-button research-toggle"
+                        id="research-toggle"
+                        aria-pressed="false"
+                        title="Enable online research"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M3 12h18"/>
+                            <path d="M12 3a15 15 0 0 1 0 18"/>
+                            <path d="M12 3a15 15 0 0 0 0 18"/>
+                        </svg>
+
+                        <span>Research</span>
+                    </button>
+
+
+                    <!-- Theme -->
+                    <button
+                        type="button"
+                        class="icon-button"
+                        id="theme-toggle"
+                        aria-label="Switch to dark mode"
+                        title="Switch appearance"
+                    >
+                        <svg
+                            class="theme-sun"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <circle cx="12" cy="12" r="4"/>
+                            <path d="M12 2v2"/>
+                            <path d="M12 20v2"/>
+                            <path d="m4.93 4.93 1.42 1.42"/>
+                            <path d="m17.65 17.65 1.42 1.42"/>
+                            <path d="M2 12h2"/>
+                            <path d="M20 12h2"/>
+                            <path d="m4.93 19.07 1.42-1.42"/>
+                            <path d="m17.65 6.35 1.42-1.42"/>
+                        </svg>
+
+                        <svg
+                            class="theme-moon"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/>
+                        </svg>
+                    </button>
+
+
+                    <!-- New conversation shortcut -->
+                    <button
+                        type="button"
+                        class="icon-button"
+                        id="topbar-new-chat"
+                        aria-label="Start a new conversation"
+                        title="New conversation"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 5v14"/>
+                            <path d="M5 12h14"/>
+                        </svg>
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- CHAT AREA -->
+            <section
+                class="chat-viewport"
+                id="chat-viewport"
+                aria-label="Conversation"
+            >
+
+                <div class="chat-content" id="chat-content">
+
+                    <!-- Welcome screen -->
+                    <section
+                        class="welcome-screen"
+                        id="welcome-screen"
+                    >
+
+                        <div class="welcome-logo" aria-hidden="true">
+                            ✳
+                        </div>
+
+                        <h2>What can I help you with?</h2>
+
+                        <p class="welcome-description">
+                            Ask questions, write code, solve problems,
+                            or research information online.
+                        </p>
+
+
+                        <!-- Suggested prompts -->
+                        <div class="suggestion-grid">
+
+                            <button
+                                type="button"
+                                class="suggestion-card"
+                                data-prompt="Explain a difficult topic to me step by step."
+                            >
+                                <span class="suggestion-icon">◎</span>
+
+                                <span class="suggestion-text">
+                                    <strong>Learn something</strong>
+                                    <small>Understand complex topics</small>
+                                </span>
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="suggestion-card"
+                                data-prompt="Help me write clean, well-structured code and explain how it works."
+                            >
+                                <span class="suggestion-icon">&lt;/&gt;</span>
+
+                                <span class="suggestion-text">
+                                    <strong>Write code</strong>
+                                    <small>Build and debug projects</small>
+                                </span>
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="suggestion-card"
+                                data-prompt="Research a topic online and provide a summary with source links."
+                                data-research="true"
+                            >
+                                <span class="suggestion-icon">◎</span>
+
+                                <span class="suggestion-text">
+                                    <strong>Research online</strong>
+                                    <small>Find information and sources</small>
+                                </span>
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="suggestion-card"
+                                data-prompt="Help me organise my ideas into a clear and practical plan."
+                            >
+                                <span class="suggestion-icon">▤</span>
+
+                                <span class="suggestion-text">
+                                    <strong>Plan something</strong>
+                                    <small>Turn ideas into action</small>
+                                </span>
+                            </button>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- Messages inserted by script.js -->
+                    <div
+                        class="messages"
+                        id="chat"
+                        aria-live="polite"
+                        aria-relevant="additions"
+                    ></div>
+
+
+                    <!-- Loading indicator -->
+                    <div
+                        class="loading-indicator"
+                        id="loading-indicator"
+                        role="status"
+                        aria-live="polite"
+                        hidden
+                    >
+                        <span class="loading-dot"></span>
+                        <span class="loading-dot"></span>
+                        <span class="loading-dot"></span>
+
+                        <span id="loading-text">
+                            NOVA is thinking...
+                        </span>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- COMPOSER -->
+            <footer class="composer-area">
+
+                <div
+                    class="research-notice"
+                    id="research-notice"
+                    hidden
+                >
+                    <span aria-hidden="true">◎</span>
+
+                    <span>
+                        Online research is enabled.
+                        NOVA will use the research endpoint.
+                    </span>
+
+                    <button
+                        type="button"
+                        id="disable-research"
+                        aria-label="Disable online research"
+                    >
+                        Turn off
+                    </button>
+                </div>
+
+
+                <form
+                    class="composer"
+                    id="chat-form"
+                    autocomplete="off"
+                >
+
+                    <!-- Text input -->
+                    <div class="composer-input-area">
+
+                        <label
+                            for="message"
+                            class="visually-hidden"
+                        >
+                            Message NOVA AI
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            rows="1"
+                            maxlength="30000"
+                            placeholder="Message NOVA AI..."
+                            aria-label="Message NOVA AI"
+                            enterkeyhint="send"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- Composer toolbar -->
+                    <div class="composer-toolbar">
+
+                        <div class="composer-toolbar-left">
+
+                            <button
+                                type="button"
+                                class="composer-tool"
+                                id="composer-new-chat"
+                                title="Start a new chat"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 5v14"/>
+                                    <path d="M5 12h14"/>
+                                </svg>
+
+                                <span>New chat</span>
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="composer-tool"
+                                id="composer-research"
+                                aria-pressed="false"
+                                title="Toggle online research"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="9"/>
+                                    <path d="M3 12h18"/>
+                                    <path d="M12 3a15 15 0 0 1 0 18"/>
+                                    <path d="M12 3a15 15 0 0 0 0 18"/>
+                                </svg>
+
+                                <span>Research</span>
+                            </button>
+
+                        </div>
+
+
+                        <div class="composer-toolbar-right">
+
+                            <span class="keyboard-hint">
+                                Enter to send · Shift + Enter for new line
+                            </span>
+
+
+                            <!-- Stop response -->
+                            <button
+                                type="button"
+                                class="icon-button stop-button"
+                                id="stop-generation"
+                                aria-label="Stop response"
+                                title="Stop response"
+                                hidden
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <rect
+                                        x="7"
+                                        y="7"
+                                        width="10"
+                                        height="10"
+                                        rx="1"
+                                    />
+                                </svg>
+                            </button>
+
+
+                            <!-- Send -->
+                            <button
+                                type="submit"
+                                class="send-button"
+                                id="send-button"
+                                aria-label="Send message"
+                                title="Send message"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 19V5"/>
+                                    <path d="m5 12 7-7 7 7"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+                <p class="disclaimer">
+                    NOVA AI can make mistakes. Verify important information.
+                </p>
+
+            </footer>
+
+        </main>
+
+    </div>
+
+
+    <!-- MOBILE SIDEBAR BACKDROP -->
+    <div
+        class="sidebar-backdrop"
+        id="sidebar-backdrop"
+        hidden
+    ></div>
+
+
+    <!-- CONFIRMATION / GENERAL DIALOG -->
+    <dialog
+        class="nova-dialog"
+        id="confirmation-dialog"
+        aria-labelledby="dialog-title"
+    >
+
+        <div class="dialog-content">
+
+            <h2 id="dialog-title">Confirm action</h2>
+
+            <p id="dialog-message">
+                Are you sure you want to continue?
+            </p>
+
+            <div class="dialog-actions">
+
+                <button
+                    type="button"
+                    class="dialog-button secondary-button"
+                    id="dialog-cancel"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    class="dialog-button primary-button"
+                    id="dialog-confirm"
+                >
+                    Confirm
+                </button>
+
+            </div>
+
+        </div>
+
+    </dialog>
+
+
+    <!-- EDIT CONVERSATION TITLE -->
+    <dialog
+        class="nova-dialog"
+        id="rename-dialog"
+        aria-labelledby="rename-title"
+    >
+
+        <form id="rename-form" class="dialog-content">
+
+            <h2 id="rename-title">Rename conversation</h2>
+
+            <label for="rename-input">
+                Conversation title
+            </label>
+
+            <input
+                type="text"
+                id="rename-input"
+                maxlength="120"
+                required
+                autocomplete="off"
+            >
+
+            <div class="dialog-actions">
+
+                <button
+                    type="button"
+                    class="dialog-button secondary-button"
+                    id="rename-cancel"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="dialog-button primary-button"
+                    id="rename-save"
+                >
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+    <!-- ABOUT NOVA -->
+    <dialog
+        class="nova-dialog"
+        id="about-dialog"
+        aria-labelledby="about-title"
+    >
+
+        <div class="dialog-content">
+
+            <div class="about-logo" aria-hidden="true">✳</div>
+
+            <h2 id="about-title">NOVA AI</h2>
+
+            <p>
+                Your personal AI assistant for conversations,
+                programming, learning and online research.
+            </p>
+
+            <p class="about-version">
+                Powered by your configured AI and research services.
+            </p>
+
+            <div class="dialog-actions">
+
+                <button
+                    type="button"
+                    class="dialog-button primary-button"
+                    id="about-close"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </dialog>
+
+
+    <!-- Toast notifications -->
+    <div
+        class="toast-container"
+        id="toast-container"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+
+    <!-- Application JavaScript -->
+    <script src="/script.js" defer></script>
+
+</body>
+</html>
